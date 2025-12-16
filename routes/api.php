@@ -5,17 +5,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 
-// Rutas públicas
+// Rutas públicas (sin autenticación)
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Rutas protegidas
+// Rutas protegidas (requieren autenticación Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
-    // Auth
+    // Autenticación
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     
-    // Proyectos (CRUD completo)
+    // Proyectos
     Route::get('/projects', [ProjectController::class, 'index']);
     Route::post('/projects', [ProjectController::class, 'store']);
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/projects/{id}/archive', [ProjectController::class, 'archive']);
     Route::post('/projects/{id}/unarchive', [ProjectController::class, 'unarchive']);
     
-    // Tareas dentro de proyectos
+    // Tareas
     Route::get('/projects/{projectId}/tasks', [TaskController::class, 'index']);
     Route::post('/projects/{projectId}/tasks', [TaskController::class, 'store']);
     Route::get('/projects/{projectId}/tasks/{id}', [TaskController::class, 'show']);
